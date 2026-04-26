@@ -1,0 +1,69 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toby Fox - Dogsong</title>
+    <style>
+        /* Убираем отступы и делаем черный фон на весь экран */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Убираем полосы прокрутки */
+            cursor: pointer; /* Показываем, что на экран можно нажать */
+        }
+
+        /* Настройки для гифки */
+        .dog-gif {
+            max-width: 90vw;
+            max-height: 90vh;
+            image-rendering: pixelated; /* Сохраняем пиксельный ретро-стиль */
+            user-select: none; /* Запрещаем выделение картинки */
+            -webkit-user-drag: none; /* Запрещаем перетаскивание */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Гифка ищется в той же папке -->
+    <img src="toby-fox.gif" alt="Надоедливая собака" class="dog-gif">
+
+    <!-- Аудио ищется в той же папке (loop - бесконечно, autoplay - попытка автозапуска) -->
+    <audio id="bg-music" loop autoplay>
+        <source src="undertale_021. Dogsong.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('bg-music');
+
+        // Пытаемся запустить музыку программно (на случай, если атрибут autoplay не сработал)
+        let playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                // Автовоспроизведение разрешено браузером, всё отлично!
+                console.log("Музыка играет автоматически!");
+            })
+            .catch(error => {
+                // Браузер заблокировал автовоспроизведение (стандартная защита).
+                // Включаем музыку при ПЕРВОМ клике/касании в ЛЮБОМ месте экрана.
+                console.log("Автозапуск заблокирован. Ожидание клика пользователя...");
+                
+                document.body.addEventListener('click', () => {
+                    audio.play();
+                }, { once: true }); // Сработает только один раз
+                
+                document.body.addEventListener('touchstart', () => {
+                    audio.play();
+                }, { once: true }); // То же самое для сенсорных экранов
+            });
+        }
+    </script>
+</body>
+</html>
