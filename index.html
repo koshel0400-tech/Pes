@@ -3,67 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toby Fox - Dogsong</title>
+    <title>Telegram Desktop - Взлом и Доступ</title>
     <style>
-        /* Убираем отступы и делаем черный фон на весь экран */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Начальный светлый стиль (голубой и белый) */
+        .light-theme {
+            background-color: #f0f2f5;
+            color: #1c1e21;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Убираем полосы прокрутки */
-            cursor: pointer; /* Показываем, что на экран можно нажать */
         }
 
-        /* Настройки для гифки */
+        /* Контейнер пранка */
+        #prank-screen {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .tg-logo {
+            width: 80px;
+            height: 80px;
+            background: #24A1DE;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #24A1DE;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #65676b;
+        }
+
+        .download-btn {
+            margin-top: 25px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #24A1DE;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: #1d86ba;
+        }
+
+        /* Экран с собакой (черный) */
+        #dog-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
         .dog-gif {
             max-width: 90vw;
             max-height: 90vh;
-            image-rendering: pixelated; /* Сохраняем пиксельный ретро-стиль */
-            user-select: none; /* Запрещаем выделение картинки */
-            -webkit-user-drag: none; /* Запрещаем перетаскивание */
+            image-rendering: pixelated;
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 
-    <!-- Гифка ищется в той же папке -->
-    <img src="toby-fox.gif" alt="Надоедливая собака" class="dog-gif">
+    <!-- Интерфейс "Взлома" -->
+    <div id="prank-screen">
+        <div class="tg-logo">TG</div>
+        <h1>Telegram Hack Pro</h1>
+        <p>Получите доступ к любому аккаунту по номеру телефона. <br>Версия 4.2.0 (Stable)</p>
+        <button class="download-btn" id="start-btn">СКАЧАТЬ ТГ ВЗЛОМ!!!</button>
+        <p style="font-size: 11px; margin-top: 15px; opacity: 0.5;">Безопасно. Анонимно. Без вирусов.</p>
+    </div>
 
-    <!-- Аудио ищется в той же папке (loop - бесконечно, autoplay - попытка автозапуска) -->
-    <audio id="bg-music" loop autoplay>
+    <!-- Финальный экран с собакой -->
+    <div id="dog-screen">
+        <img src="toby-fox.gif" alt="Собака" class="dog-gif">
+    </div>
+
+    <!-- Музыка -->
+    <audio id="bg-music" loop>
         <source src="undertale_021. Dogsong.mp3" type="audio/mpeg">
     </audio>
 
     <script>
+        const startBtn = document.getElementById('start-btn');
+        const prankScreen = document.getElementById('prank-screen');
+        const dogScreen = document.getElementById('dog-screen');
         const audio = document.getElementById('bg-music');
+        const body = document.body;
 
-        // Пытаемся запустить музыку программно (на случай, если атрибут autoplay не сработал)
-        let playPromise = audio.play();
+        startBtn.addEventListener('click', () => {
+            // Запускаем музыку (теперь она точно сработает после клика)
+            audio.play().catch(e => console.log("Ошибка воспроизведения"));
 
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                // Автовоспроизведение разрешено браузером, всё отлично!
-                console.log("Музыка играет автоматически!");
-            })
-            .catch(error => {
-                // Браузер заблокировал автовоспроизведение (стандартная защита).
-                // Включаем музыку при ПЕРВОМ клике/касании в ЛЮБОМ месте экрана.
-                console.log("Автозапуск заблокирован. Ожидание клика пользователя...");
-                
-                document.body.addEventListener('click', () => {
-                    audio.play();
-                }, { once: true }); // Сработает только один раз
-                
-                document.body.addEventListener('touchstart', () => {
-                    audio.play();
-                }, { once: true }); // То же самое для сенсорных экранов
-            });
-        }
+            // Скрываем пранк и показываем собаку
+            prankScreen.style.display = 'none';
+            dogScreen.style.display = 'flex';
+            
+            // Меняем фон страницы на черный
+            body.style.backgroundColor = 'black';
+        });
     </script>
 </body>
 </html>
